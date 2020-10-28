@@ -8,6 +8,11 @@ app.post('/', (req, res) => {
     res.send("2f08e3bc");
 });
 
+app.get('/', (req, res) => {
+   console.log(req.body);
+   res.sendCode(200);
+});
+
 app.listen(PORT, err => {
     if(err) return console.log(err);
     console.log("Server starter on port", PORT);
