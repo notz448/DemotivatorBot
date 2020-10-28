@@ -4,7 +4,7 @@ const app = express();
 const PORT = process.env.PORT;
 
 app.post('/', (req, res) => {
-    console.log(req);
+    console.log(req.body);
 });
 
 app.listen(PORT, err => {
