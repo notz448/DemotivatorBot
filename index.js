@@ -4,7 +4,7 @@ const app = express();
 
 const PORT = process.env.PORT;
 
-const parser = bodyParser.urlencoded({extended: false});
+const parser = bodyParser.json();
 
 app.post('/', parser, (req, res) => {
     console.log(req.body);
