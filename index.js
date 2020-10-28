@@ -1,16 +1,14 @@
 const express = require("express");
+const bodyParser = require("body-parser");
 const app = express();
 
 const PORT = process.env.PORT;
 
-app.post('/', (req, res) => {
+const parser = bodyParser.urlencoded({extended: false});
+
+app.post('/', parser, (req, res) => {
     console.log(req.body);
     res.send("2f08e3bc");
-});
-
-app.get('/', (req, res) => {
-   console.log(req.body);
-   res.sendCode(200);
 });
 
 app.listen(PORT, err => {
