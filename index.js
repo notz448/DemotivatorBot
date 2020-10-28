@@ -5,6 +5,7 @@ const PORT = process.env.PORT;
 
 app.post('/', (req, res) => {
     console.log(req.body);
+    res.send("2f08e3bc");
 });
 
 app.listen(PORT, err => {
