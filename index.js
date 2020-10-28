@@ -8,7 +8,11 @@ const parser = bodyParser.json();
 
 app.post('/', parser, (req, res) => {
     console.log(req.body);
-    res.send("2f08e3bc");
+    if(req.body.type == 'confirmation'){
+        res.send("2f08e3bc");
+    }else{
+        res.send("ok");
+    }
 });
 
 app.listen(PORT, err => {
