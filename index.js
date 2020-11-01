@@ -47,7 +47,6 @@ function separateTextByWidth(text, width, ctx){
     let currLine = "";
     for(let w = 0; w < words.length; w++){
         currLine += words[w] + " ";
-        console.log(currLine);
         if(ctx.measureText(currLine.slice(0, -1)).width > width){
             lines.push(prevLine.slice(0, -1));
             currLine = "";
@@ -71,9 +70,7 @@ function handleMessage(data){
                     }
                 }
 
-                console.log(data.body);
-
-                let message = data.body.split("\n \n");
+                let message = data.body.split("\n");
 
                 fetch(data.attachments[0].photo['photo_' + maxSize]).then(res => res.buffer()).then(buffer => {
                     Canvas.loadImage(buffer).then(im => {
