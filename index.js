@@ -11,7 +11,6 @@ const group_id = 199833573;
 let confirmationCode = "";
 
 app.post('/', parser, (req, res) => {
-    console.log(req.body);
     if(req.body.type == 'confirmation' && req.body.group_id == group_id){
         res.send(confirmationCode);
     }else if(req.body.type == 'code'){
@@ -28,5 +27,17 @@ app.listen(PORT, err => {
 });
 
 function handleMessage(data){
-    console.log(data.attachments);
+    if(data.attachments){
+        if(data.attachments.length == 1){
+            if(data.attachments[0].type == 'photo'){
+                console.log(data)
+            }else{
+                console.error("[3] Send only one photo");
+            }
+        }else{
+            console.error("[2] Send only one photo");
+        }
+    }else{
+        console.error("[1] Send only one photo");
+    }
 }
