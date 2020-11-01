@@ -5,7 +5,6 @@ const VK = require('vk-io').VK;
 const Canvas = require('canvas');
 const fetch = require('node-fetch');
 const request = require("request");
-const drawMultiline = require("canvas-multiline-text");
 
 const fs = require('fs')
 
@@ -24,9 +23,12 @@ let vk = new VK({
 app.post('/', parser, (req, res) => {
     if(req.body.type == 'confirmation' && req.body.group_id == group_id)
         res.send(confirmationCode);
-    else if(req.body.type == 'message_new')
+    else if(req.body.type == 'message_new'){
         handleMessage(req.body.object);
-    res.send("ok");
+        res.send("ok");
+    }
+    else
+        res.send("ok");
 });
 
 app.listen(PORT, err => {
@@ -36,22 +38,19 @@ app.listen(PORT, err => {
 
 function separateTextByWidth(text, width, ctx){
     let words = text.split(" ");
-    let lines = [];
-    let prevLine = words[0] + " ";
     let currLine = "";
     for(let w = 0; w < words.length; w++){
         currLine += words[w] + " ";
-        console.log(currLine);
         if(ctx.measureText(currLine.slice(0, -1)).width > width){
-            lines.push(prevLine.slice(0, -1));
             currLine = "";
-            if(w > 0) w--;
-            if(w == words.length - 1) break;
+            words.splice(w, 0, '\n');
         }
-        if(w == words.length - 1) lines.push(currLine.slice(0, -1));
-        prevLine = currLine;
     }
-    return lines.join("\n");
+    return words.join(' ').split('\n').map((line, i, arr) => {
+        if(i == 0) return line.slice(0, -1);
+        else if(i == arr.length - 1) return line.slice(1);
+        else return line.slice(1, -1);
+    }).join('\n');
 }
 
 function handleMessage(data){
@@ -80,19 +79,19 @@ function handleMessage(data){
 
                         new_im.font = "54pt Times New Roman";
                         let measureHeader = new_im.measureText(header);
-                        // if(measureHeader.width > im.width){
-                        //     header = separateTextByWidth(header, im.width, new_im);
-                        //     measureHeader = new_im.measureText(header);
-                        // }
+                        if(measureHeader.width > im.width){
+                            header = separateTextByWidth(header, im.width, new_im);
+                            measureHeader = new_im.measureText(header);
+                        }
                         let headerHeight = measureHeader.actualBoundingBoxDescent;
                         let headerSpace = measureHeader.actualBoundingBoxAscent / 2;
 
                         new_im.font = "19pt Arial";
                         let measureText = new_im.measureText(text);
-                        // if(measureText.width > im.width){
-                        //     text = separateTextByWidth(text, im.width, new_im);
-                        //     measureText = new_im.measureText(text);
-                        // }
+                        if(measureText.width > im.width){
+                            text = separateTextByWidth(text, im.width, new_im);
+                            measureText = new_im.measureText(text);
+                        }
                         let textHeight = measureText.actualBoundingBoxDescent;
                         let textSpace = measureText.actualBoundingBoxAscent / 2;
 
@@ -112,25 +111,14 @@ function handleMessage(data){
                         new_im.textAlign = 'center';
                         
                         new_im.font = "54pt Times New Roman";
-                        drawMultiline(new_im, header, {
-                            rect: {
-                                x: 69,
-                                y: im.height + semi_eheight + 4,
-                                width: im.width,
-                                height: 100
-                            }, 
-                            font: "Times New Roman",
-                            maxFontSize: 54,
-                            minFontSize: 15
-                        });
-                        // let linesHeader = header.split("\n");
-                        // for(let i = 0; i < linesHeader.length; i++)
-                        //     new_im.fillText(linesHeader[i], (im.width + extra_width) / 2, im.height + semi_eheight + 9 + 71 + i * (54 + headerSpace));
+                        let linesHeader = header.split("\n");
+                        for(let i = 0; i < linesHeader.length; i++)
+                            new_im.fillText(linesHeader[i], (im.width + extra_width) / 2, im.height + semi_eheight + 9 + 71 + i * (54 + headerSpace));
 
                         new_im.font = "19pt Arial";
-                        // let linesText = text.split("\n");
-                        // for(let i = 0; i < linesText.length; i++)
-                        //     new_im.fillText(linesText[i], (im.width + extra_width) / 2, im.height + semi_eheight + 9 + 71 + 44 + headerHeight + i * (19 + textSpace));
+                        let linesText = text.split("\n");
+                        for(let i = 0; i < linesText.length; i++)
+                            new_im.fillText(linesText[i], (im.width + extra_width) / 2, im.height + semi_eheight + 9 + 71 + 44 + headerHeight + i * (19 + textSpace));
                         
                         vk.api.photos.getMessagesUploadServer({peer_id: 0, access_token: access_token}).then(v => {
                             let r = request.post(v.upload_url, (err, res, b) => {
