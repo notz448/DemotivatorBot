@@ -16,8 +16,8 @@ app.post('/', parser, (req, res) => {
         res.send(confirmationCode);
     }else if(req.body.type == 'code'){
         confirmationCode = req.body.code;
-    }else{
-        handleMessage(req.body);
+    }else if(req.body.type == 'message_new'){
+        handleMessage(req.body.object);
         res.send("ok");
     }
 });
