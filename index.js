@@ -13,25 +13,24 @@ const PORT = process.env.PORT || 3000;
 const parser = bodyParser.json();
 
 const group_id = 199833573;
-let confirmationCode = "";
-let access_token = "";
+let confirmationCode = process.env.confirmationCode;
+let access_token = process.env.access_token;
 
 let vk = new VK({
     token: access_token
 });
 
 app.post('/', parser, (req, res) => {
-    if(req.body.type == 'confirmation' && req.body.group_id == group_id){
+    if(req.body.type == 'confirmation' && req.body.group_id == group_id)
         res.send(confirmationCode);
-    }else if(req.body.type == 'code'){
+    /*else if(req.body.type == 'code'){
         confirmationCode = req.body.code;
         access_token = req.body.access_token;
         vk = new VK({
             token: access_token
-        });
-    }else if(req.body.type == 'message_new'){
+        });*/
+    else if(req.body.type == 'message_new')
         handleMessage(req.body.object);
-    }
     res.send("ok");
 });
 
