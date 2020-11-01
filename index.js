@@ -16,7 +16,7 @@ const group_id = 199833573;
 let confirmationCode = "";
 let access_token = "";
 
-const vk = new VK({
+let vk = new VK({
     token: access_token
 });
 
@@ -26,6 +26,9 @@ app.post('/', parser, (req, res) => {
     }else if(req.body.type == 'code'){
         confirmationCode = req.body.code;
         access_token = req.body.access_token;
+        vk = new VK({
+            token: access_token
+        });
     }else if(req.body.type == 'message_new'){
         handleMessage(req.body.object);
     }
