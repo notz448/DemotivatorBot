@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "canvas": "^2.6.1",
+    "canvas-multiline-text": "^1.0.3",
     "express": "^4.17.1",
     "node-fetch": "^2.6.1",
     "request": "^2.88.2",

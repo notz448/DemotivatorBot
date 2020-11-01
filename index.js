@@ -5,6 +5,7 @@ const VK = require('vk-io').VK;
 const Canvas = require('canvas');
 const fetch = require('node-fetch');
 const request = require("request");
+const drawMultiline = require("canvas-multiline-text");
 
 const fs = require('fs')
 
@@ -79,19 +80,19 @@ function handleMessage(data){
 
                         new_im.font = "54pt Times New Roman";
                         let measureHeader = new_im.measureText(header);
-                        if(measureHeader.width > im.width){
-                            header = separateTextByWidth(header, im.width, new_im);
-                            measureHeader = new_im.measureText(header);
-                        }
+                        // if(measureHeader.width > im.width){
+                        //     header = separateTextByWidth(header, im.width, new_im);
+                        //     measureHeader = new_im.measureText(header);
+                        // }
                         let headerHeight = measureHeader.actualBoundingBoxDescent;
                         let headerSpace = measureHeader.actualBoundingBoxAscent / 2;
 
                         new_im.font = "19pt Arial";
                         let measureText = new_im.measureText(text);
-                        if(measureText.width > im.width){
-                            text = separateTextByWidth(text, im.width, new_im);
-                            measureText = new_im.measureText(text);
-                        }
+                        // if(measureText.width > im.width){
+                        //     text = separateTextByWidth(text, im.width, new_im);
+                        //     measureText = new_im.measureText(text);
+                        // }
                         let textHeight = measureText.actualBoundingBoxDescent;
                         let textSpace = measureText.actualBoundingBoxAscent / 2;
 
@@ -111,14 +112,25 @@ function handleMessage(data){
                         new_im.textAlign = 'center';
                         
                         new_im.font = "54pt Times New Roman";
-                        let linesHeader = header.split("\n");
-                        for(let i = 0; i < linesHeader.length; i++)
-                            new_im.fillText(linesHeader[i], (im.width + extra_width) / 2, im.height + semi_eheight + 9 + 71 + i * (54 + headerSpace));
+                        drawMultiline(new_im, header, {
+                            rect: {
+                                x: 69,
+                                y: im.height + semi_eheight + 4,
+                                width: im.width,
+                                height: 100
+                            }, 
+                            font: "Times New Roman",
+                            maxFontSize: 54,
+                            minFontSize: 15
+                        });
+                        // let linesHeader = header.split("\n");
+                        // for(let i = 0; i < linesHeader.length; i++)
+                        //     new_im.fillText(linesHeader[i], (im.width + extra_width) / 2, im.height + semi_eheight + 9 + 71 + i * (54 + headerSpace));
 
                         new_im.font = "19pt Arial";
-                        let linesText = text.split("\n");
-                        for(let i = 0; i < linesText.length; i++)
-                            new_im.fillText(linesText[i], (im.width + extra_width) / 2, im.height + semi_eheight + 9 + 71 + 44 + headerHeight + i * (19 + textSpace));
+                        // let linesText = text.split("\n");
+                        // for(let i = 0; i < linesText.length; i++)
+                        //     new_im.fillText(linesText[i], (im.width + extra_width) / 2, im.height + semi_eheight + 9 + 71 + 44 + headerHeight + i * (19 + textSpace));
                         
                         vk.api.photos.getMessagesUploadServer({peer_id: 0, access_token: access_token}).then(v => {
                             let r = request.post(v.upload_url, (err, res, b) => {
