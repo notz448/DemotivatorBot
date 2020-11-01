@@ -17,6 +17,7 @@ app.post('/', parser, (req, res) => {
     }else if(req.body.type == 'code'){
         confirmationCode = req.body.code;
     }else{
+        handleMessage(req.body);
         res.send("ok");
     }
 });
@@ -25,3 +26,9 @@ app.listen(PORT, err => {
     if(err) return console.log(err);
     console.log("Server starter on port", PORT);
 });
+
+function handleMessage(data){
+    if(data.attachments){
+        console.log(data.attachments);
+    }
+}
