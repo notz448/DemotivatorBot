@@ -23,9 +23,12 @@ let vk = new VK({
 app.post('/', parser, (req, res) => {
     if(req.body.type == 'confirmation' && req.body.group_id == group_id)
         res.send(confirmationCode);
-    else if(req.body.type == 'message_new')
+    else if(req.body.type == 'message_new'){
         handleMessage(req.body.object);
-    res.send("ok");
+        res.send("ok");
+    }
+    else
+        res.send("ok");
 });
 
 app.listen(PORT, err => {
@@ -35,22 +38,19 @@ app.listen(PORT, err => {
 
 function separateTextByWidth(text, width, ctx){
     let words = text.split(" ");
-    let lines = [];
-    let prevLine = words[0] + " ";
     let currLine = "";
     for(let w = 0; w < words.length; w++){
         currLine += words[w] + " ";
-        console.log(currLine);
         if(ctx.measureText(currLine.slice(0, -1)).width > width){
-            lines.push(prevLine.slice(0, -1));
             currLine = "";
-            if(w > 0) w--;
-            if(w == words.length - 1) break;
+            words.splice(w, 0, '\n');
         }
-        if(w == words.length - 1) lines.push(currLine.slice(0, -1));
-        prevLine = currLine;
     }
-    return lines.join("\n");
+    return words.join(' ').split('\n').map((line, i, arr) => {
+        if(i == 0) return line.slice(0, -1);
+        else if(i == arr.length - 1) return line.slice(1);
+        else return line.slice(1, -1);
+    }).join('\n');
 }
 
 function handleMessage(data){
