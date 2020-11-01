@@ -4,12 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "canvas": "^2.6.1",
+    "express": "^4.17.1",
+    "node-fetch": "^2.6.1",
+    "request": "^2.88.2",
+    "vk-io": "^4.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
   }
 }
