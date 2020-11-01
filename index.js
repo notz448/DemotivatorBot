@@ -71,6 +71,8 @@ function handleMessage(data){
                     }
                 }
 
+                console.log(data.body);
+
                 let message = data.body.split("\n \n");
 
                 fetch(data.attachments[0].photo['photo_' + maxSize]).then(res => res.buffer()).then(buffer => {
