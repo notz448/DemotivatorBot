@@ -6,10 +6,16 @@ const PORT = process.env.PORT;
 
 const parser = bodyParser.json();
 
+const group_id = 199833573;
+
+let confirmationCode = "";
+
 app.post('/', parser, (req, res) => {
     console.log(req.body);
-    if(req.body.type == 'confirmation'){
-        res.send("fc44f4d9");
+    if(req.body.type == 'confirmation' && req.body.group_id == group_id){
+        res.send(confirmationCode);
+    }else if(req.body.type == 'code'){
+        confirmationCode = req.body.code;
     }else{
         res.send("ok");
     }
