@@ -9,7 +9,7 @@ const parser = bodyParser.json();
 app.post('/', parser, (req, res) => {
     console.log(req.body);
     if(req.body.type == 'confirmation'){
-        res.send("2f08e3bc");
+        res.send("fc44f4d9");
     }else{
         res.send("ok");
     }
