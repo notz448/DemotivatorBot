@@ -23,12 +23,6 @@ let vk = new VK({
 app.post('/', parser, (req, res) => {
     if(req.body.type == 'confirmation' && req.body.group_id == group_id)
         res.send(confirmationCode);
-    /*else if(req.body.type == 'code'){
-        confirmationCode = req.body.code;
-        access_token = req.body.access_token;
-        vk = new VK({
-            token: access_token
-        });*/
     else if(req.body.type == 'message_new')
         handleMessage(req.body.object);
     res.send("ok");
@@ -46,6 +40,7 @@ function separateTextByWidth(text, width, ctx){
     let currLine = "";
     for(let w = 0; w < words.length; w++){
         currLine += words[w] + " ";
+        console.log(currLine);
         if(ctx.measureText(currLine.slice(0, -1)).width > width){
             lines.push(prevLine.slice(0, -1));
             currLine = "";
