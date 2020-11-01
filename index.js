@@ -25,12 +25,11 @@ app.post('/', parser, (req, res) => {
         res.send(confirmationCode);
     }else if(req.body.type == 'code'){
         confirmationCode = req.body.code;
-    }else if(req.body.type == 'access_token'){
         access_token = req.body.access_token;
     }else if(req.body.type == 'message_new'){
         handleMessage(req.body.object);
-        res.send("ok");
     }
+    res.send("ok");
 });
 
 app.listen(PORT, err => {
