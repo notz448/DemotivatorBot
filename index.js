@@ -14,7 +14,7 @@ const parser = bodyParser.json();
 
 const group_id = 199833573;
 let confirmationCode = "";
-const access_token = "";
+let access_token = "";
 
 const vk = new VK({
     token: access_token
