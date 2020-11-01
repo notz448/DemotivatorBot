@@ -28,7 +28,5 @@ app.listen(PORT, err => {
 });
 
 function handleMessage(data){
-    if(data.attachments){
-        console.log(data.attachments);
-    }
+    console.log(data.attachments);
 }
